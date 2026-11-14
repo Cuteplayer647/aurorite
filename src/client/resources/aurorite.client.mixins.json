@@ -1,0 +1,25 @@
+{
+	"required": true,
+	"package": "com.cute.aurorite.client.mixin",
+	"compatibilityLevel": "JAVA_25",
+	"client": [
+		"ClickGuiKeyMixin",
+		"MouseHandlerMixin",
+		"AttackMixin",
+		"DamageMixin",
+		"FreelookMixin",
+		"FreelookYawMixin",
+		"FreelookInteractionMixin",
+		"TitleScreenMixin",
+		"MenuBackgroundMixin",
+		"LevelLoadingScreenMixin",
+		"WindowTitleMixin",
+		"OptionInstanceAccessor"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	},
+	"overwrites": {
+		"requireAnnotations": true
+	}
+}

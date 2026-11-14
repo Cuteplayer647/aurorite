@@ -109,17 +109,19 @@ public class ClickGuiScreen extends Screen {
 
 	@Override
 	public void extractBackground(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
-		// One invisible pixel keeps the background stratum non-empty; the blur is
-		// requested from the stratum that draws the panel.
-		g.fill(0, 0, 1, 1, 0x01000000);
+		// Mirrors what the vanilla pause menu does: draw into the background
+		// stratum, then ask for the blur of everything drawn before it. The blur
+		// is only processed when this stratum already holds at least one draw, so
+		// the first fill covers the screen at an invisible alpha.
+		g.fill(0, 0, g.guiWidth(), g.guiHeight(), 0x01000000);
+
+		if (Theme.BLUR) {
+			extractBlurredBackground(g);
+		}
 	}
 
 	@Override
 	public void extractRenderState(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
-		if (Theme.BLUR) {
-			g.blurBeforeThisStratum();
-		}
-
 		int rightX = panelX + leftWidth;
 		int rightWidth = panelWidth - leftWidth;
 

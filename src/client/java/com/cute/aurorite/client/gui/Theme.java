@@ -6,8 +6,14 @@ public final class Theme {
 	private Theme() {
 	}
 
-	/** Whether the background behind the interface is blurred. */
-	public static final boolean BLUR = true;
+	/**
+	 * Whether the world behind the interface is blurred.
+	 *
+	 * <p>Off by default: the translucent white panel is the look this client goes
+	 * for. The blur path is kept because 26.3's menu blur can be unreliable on
+	 * custom screens; flip this to true to try it.
+	 */
+	public static final boolean BLUR = false;
 
 	/** Left column, 70% opaque white. */
 	public static final int PANEL_LEFT = 0xB3FFFFFF;

@@ -5,8 +5,8 @@
 
 Minecraft 26.3 的 Fabric 客户端，含 ClickGUI、HUD 模块与 FreeLook。
 
-A lightweight Fabric client for **Minecraft 26.3**, built around a frosted-glass ClickGUI and a small set of
-movement and HUD modules.
+A lightweight Fabric client for **Minecraft 26.3**, built around a clean, translucent ClickGUI and a small
+set of movement and HUD modules.
 
 - Repository: <https://github.com/Cuteplayer647/aurorite>
 - Issues: <https://github.com/Cuteplayer647/aurorite/issues>
@@ -26,8 +26,12 @@ movement and HUD modules.
 | **FreeLook** | Hold a key to switch to third person and orbit the camera without turning the body |
 | **Watermark** | Draws the client logo on the HUD |
 
-The ClickGUI itself is split into a 70% white module list and a 50% white settings panel over a blurred
-background, with scrollable lists, per-module settings and a HUD editor.
+The ClickGUI is a clean, translucent window: a 70% white module list on the left, a 50% white settings
+panel on the right, both with rounded corners and scrollable lists. Right click a module to open its
+settings, left click to toggle it, and use the `hud edit` button to drag the HUD elements around.
+
+The main menu and every loading screen use a static background image instead of the vanilla rotating
+panorama.
 
 ## Requirements
 
@@ -75,6 +79,9 @@ every setting value and the HUD positions survive a restart.
 - GUI sizes are computed from the smallest of several window metrics to cope with scaled desktops; on some
   setups the interface may look slightly smaller than it could.
 - Key binds are limited to letters and digits by design.
+- The background behind the ClickGUI is **not** blurred. 26.3's menu blur proved unreliable on custom
+  screens, so the panels are simply translucent; `Theme.BLUR` can be flipped on to try it. The panels look
+  intentional either way.
 
 ## Artwork
 

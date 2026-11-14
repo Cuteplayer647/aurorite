@@ -3,7 +3,7 @@
 	"id": "aurorite",
 	"version": "${version}",
 	"name": "AuroriteClient",
-	"description": "A lightweight Fabric client for Minecraft 26.3 with a frosted-glass ClickGUI, HUD modules, FreeLook, Zoom and more.",
+	"description": "A lightweight Fabric client for Minecraft 26.3 with a translucent ClickGUI, HUD modules, FreeLook, Zoom and more.",
 	"authors": [
 		"Cuteplayer647"
 	],

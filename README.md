@@ -1,7 +1,15 @@
 # AuroriteClient
 
+[![License: GPL-3.0](https://img.shields.io/badge/license-GPL--3.0--or--later-blue.svg)](LICENSE)
+[![Minecraft 26.3](https://img.shields.io/badge/minecraft-26.3-green.svg)](https://github.com/Cuteplayer647/aurorite)
+
+Minecraft 26.3 的 Fabric 客户端，含 ClickGUI、HUD 模块与 FreeLook。
+
 A lightweight Fabric client for **Minecraft 26.3**, built around a frosted-glass ClickGUI and a small set of
 movement and HUD modules.
+
+- Repository: <https://github.com/Cuteplayer647/aurorite>
+- Issues: <https://github.com/Cuteplayer647/aurorite/issues>
 
 ## Features
 
@@ -75,7 +83,7 @@ every setting value and the HUD positions survive a restart.
 
 ## License
 
-Copyright (C) 2026 Aurorite.
+Copyright (C) 2026 Cuteplayer647.
 
 This program is free software: you can redistribute it and/or modify it under the terms of the
 **GNU General Public License as published by the Free Software Foundation, either version 3 of the License,

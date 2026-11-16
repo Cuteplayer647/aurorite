@@ -1,5 +1,7 @@
 package com.cute.aurorite.client.hud;
 
+import java.util.List;
+
 import com.cute.aurorite.client.gui.Theme;
 import com.cute.aurorite.client.module.ModuleManager;
 import com.cute.aurorite.client.module.impl.ComboModule;
@@ -7,13 +9,19 @@ import com.cute.aurorite.client.module.impl.CpsModule;
 import com.cute.aurorite.client.module.impl.FpsModule;
 import com.cute.aurorite.client.module.impl.HealthModule;
 import com.cute.aurorite.client.module.impl.KeystrokesModule;
+import com.cute.aurorite.client.module.impl.PotionEffectsModule;
+import com.cute.aurorite.client.module.impl.ScaffoldHelperModule;
 import com.cute.aurorite.client.module.impl.WatermarkModule;
 import com.cute.aurorite.client.util.RenderUtil;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.Hud;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.effect.MobEffectInstance;
 
 /** Draws the client HUD elements (CPS counter, keystrokes and combo counter). */
 public final class HudRenderer {
@@ -22,6 +30,14 @@ public final class HudRenderer {
 	}
 
 	public static void renderAll(GuiGraphicsExtractor g) {
+		renderAll(g, false);
+	}
+
+	/**
+	 * @param force show the modules whose own conditions are not met, which the HUD
+	 *              editor needs so every element can be positioned
+	 */
+	public static void renderAll(GuiGraphicsExtractor g, boolean force) {
 		Minecraft minecraft = Minecraft.getInstance();
 		Font font = minecraft.font;
 		CpsModule cps = ModuleManager.CPS;
@@ -54,6 +70,18 @@ public final class HudRenderer {
 			renderFps(g, font, fps);
 		}
 
+		ScaffoldHelperModule scaffold = ModuleManager.SCAFFOLD_HELPER;
+
+		if (force ? scaffold.isEnabled() : scaffold.isActive()) {
+			renderScaffoldHelper(g, font, scaffold);
+		}
+
+		PotionEffectsModule potions = ModuleManager.POTION_EFFECTS;
+
+		if (potions.isEnabled()) {
+			renderPotionEffects(g, font, potions);
+		}
+
 		WatermarkModule watermark = ModuleManager.WATERMARK;
 
 		if (watermark.isEnabled()) {
@@ -63,16 +91,86 @@ public final class HudRenderer {
 
 	public static void renderHealth(GuiGraphicsExtractor g, Font font, HealthModule module) {
 		String label = module.buildLabel();
-		int width = module.measureWidth(font);
-		int height = module.measureHeight(font);
 		int x = module.getX();
 		int y = module.getY();
 		float radius = module.isRounded() ? 5.0f : 0.0f;
+
+		if (module.isNewMode()) {
+			renderVanillaHearts(g, font, module, label, x, y);
+
+			return;
+		}
+
+		int width = module.measureWidth(font);
+		int height = module.measureHeight(font);
 
 		// The card is always the light style; only the text colour tracks health.
 		RenderUtil.roundedRect(g, x, y, width, height, radius, background(module.getBackgroundAlpha(), false));
 		// Shadow on, like vanilla text, so the value stays readable over a light card.
 		g.text(font, label, x + 6, y + (height - 8) / 2, module.getHealthColour(), true);
+	}
+
+	/** Vanilla heart row, centred, with the readout above it and absorption hearts on the right. */
+	private static void renderVanillaHearts(GuiGraphicsExtractor g, Font font, HealthModule module, String label,
+			int x, int y) {
+		LocalPlayer player = Minecraft.getInstance().player;
+
+		if (player == null) {
+			return;
+		}
+
+		int contentX = x + 6;
+		int contentWidth = module.measureWidth(font) - 12;
+
+		// Text first, centred over the whole widget.
+		g.text(font, label, contentX + (contentWidth - font.width(label)) / 2,
+				y + (HealthModule.TEXT_HEIGHT - 8) / 2, module.getHealthColour(), true);
+
+		int heartY = y + HealthModule.TEXT_HEIGHT + HealthModule.HEART_GAP;
+		int hearts = module.heartCount();
+		int rowWidth = hearts * 8;
+		int rowX = contentX + (contentWidth - rowWidth) / 2;
+
+		int healthPoints = Math.max(0, (int) Math.ceil(player.getHealth()));
+		int absorptionPoints = Math.max(0, (int) Math.ceil(module.getAbsorption()));
+		boolean blinking = module.isBlinking();
+
+		Identifier container = heartSprite(blinking ? "container_blinking" : "container");
+
+		for (int index = 0; index < hearts; index++) {
+			int offset = rowX + index * 8;
+
+			g.blitSprite(RenderPipelines.GUI_TEXTURED, container, offset, heartY, 9, 9);
+
+			// The extra hearts past the first ten are the absorption ones.
+			if (index < HealthModule.HEARTS_PER_ROW) {
+				int remaining = healthPoints - index * 2;
+
+				if (remaining >= 2) {
+					g.blitSprite(RenderPipelines.GUI_TEXTURED,
+							heartSprite(blinking ? "full_blinking" : "full"), offset, heartY, 9, 9);
+				} else if (remaining == 1) {
+					g.blitSprite(RenderPipelines.GUI_TEXTURED,
+							heartSprite(blinking ? "half_blinking" : "half"), offset, heartY, 9, 9);
+				}
+			} else {
+				int remaining = absorptionPoints - (index - HealthModule.HEARTS_PER_ROW) * 2;
+
+				if (remaining >= 2) {
+					g.blitSprite(RenderPipelines.GUI_TEXTURED,
+							heartSprite(blinking ? "absorbing_full_blinking" : "absorbing_full"),
+							offset, heartY, 9, 9);
+				} else if (remaining == 1) {
+					g.blitSprite(RenderPipelines.GUI_TEXTURED,
+							heartSprite(blinking ? "absorbing_half_blinking" : "absorbing_half"),
+							offset, heartY, 9, 9);
+				}
+			}
+		}
+	}
+
+	private static Identifier heartSprite(String name) {
+		return Identifier.fromNamespaceAndPath("minecraft", "hud/heart/" + name);
 	}
 
 	/** A simple HUD card: rounded background, label on the left. */
@@ -86,7 +184,7 @@ public final class HudRenderer {
 
 	/** Draws the watermark artwork as-is: no card, no border, nothing else. */
 	public static void renderWatermark(GuiGraphicsExtractor g, WatermarkModule module) {
-		g.blitSprite(RenderPipelines.GUI_TEXTURED, WatermarkModule.SPRITE,
+		g.blitSprite(RenderPipelines.GUI_TEXTURED, module.getSprite(),
 				module.getX(), module.getY(),
 				module.getWatermarkWidth(), module.getWatermarkHeight());
 	}
@@ -107,6 +205,45 @@ public final class HudRenderer {
 		drawCard(g, font, module.buildLabel(), module.getX(), module.getY(),
 				module.measureWidth(font), module.measureHeight(font),
 				module.isDark(), module.isRounded(), module.getBackgroundAlpha());
+	}
+
+	public static void renderScaffoldHelper(GuiGraphicsExtractor g, Font font, ScaffoldHelperModule module) {
+		drawCard(g, font, module.buildLabel(), module.getX(), module.getY(),
+				module.measureWidth(font), module.measureHeight(font),
+				module.isDark(), module.isRounded(), module.getBackgroundAlpha());
+	}
+
+	/** Lunar style effect list: icon, name with level, and time left per row. */
+	public static void renderPotionEffects(GuiGraphicsExtractor g, Font font, PotionEffectsModule module) {
+		List<MobEffectInstance> effects = module.effects();
+
+		if (effects.isEmpty()) {
+			return;
+		}
+
+		int x = module.getX();
+		int y = module.getY();
+		int width = module.measureWidth(font);
+		boolean dark = module.isDark();
+		int alpha = module.getBackgroundAlpha();
+		float radius = module.isRounded() ? 5.0f : 0.0f;
+
+		for (int index = 0; index < effects.size(); index++) {
+			MobEffectInstance instance = effects.get(index);
+			int rowY = y + index * PotionEffectsModule.ROW_HEIGHT;
+
+			RenderUtil.roundedRect(g, x, rowY, width, PotionEffectsModule.ROW_HEIGHT - 2, radius,
+					background(alpha, dark));
+
+			Identifier icon = Hud.getMobEffectSprite(module.effectHolder(instance));
+			int iconY = rowY + (PotionEffectsModule.ROW_HEIGHT - 2 - PotionEffectsModule.ICON_SIZE) / 2;
+
+			g.blitSprite(RenderPipelines.GUI_TEXTURED, icon, x + 3, iconY,
+					PotionEffectsModule.ICON_SIZE, PotionEffectsModule.ICON_SIZE);
+
+			g.text(font, PotionEffectsModule.describe(instance), x + PotionEffectsModule.ICON_SIZE + 7,
+					rowY + (PotionEffectsModule.ROW_HEIGHT - 2 - 8) / 2, labelColour(dark), false);
+		}
 	}
 
 	public static void renderKeystrokes(GuiGraphicsExtractor g, Font font, KeystrokesModule module, Minecraft minecraft) {

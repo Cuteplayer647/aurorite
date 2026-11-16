@@ -18,13 +18,18 @@ set of movement and HUD modules.
 | **CPS显示** | Left/right clicks per second, with optional dark mode, corner radius and background opacity |
 | **按键显示** | WASD + space keystrokes, highlighted while held |
 | **Combo** | Consecutive hits on one entity; resets after 5 s, on a new target, or when that entity hits back |
-| **血量显示** | Current health as `12.5 ❤`, coloured green / amber / red |
+| **血量显示** | Current health as `12.5 ❤`, coloured green / amber / red. `old` mode is a text card, `new` mode is the vanilla heart bar (with absorption hearts) under the same readout |
 | **FPS显示** | Current framerate |
-| **自动疾跑** | Keeps sprinting while the forward key is held |
-| **夜视** | Full brightness by raising the gamma value (not a night vision effect) |
+| **ScaffoldHelper** | While a block is held and you look down, shows how many of that block are left (`128 Blocks`). Counts the hotbar, the inventory and the offhand; blocks inside shulker boxes are not counted |
+| **Hitbox** | Draws a plain box around players in a custom colour. Unlike F3 + B it draws only the box — no eye marker, view or velocity lines. Depth tested (no see-through) and invisible players are skipped |
+| **药水效果** | Lunar style status effect list: icon, name with level and time left. Optionally hides the vanilla top-right display |
+| **自动疾跑** | Keeps sprinting while the forward key is held, and stops at walls or while using an item |
+| **夜视** | Full brightness by overriding the lightmap brightness (not a night vision effect, does not touch the option) |
 | **Zoom** | Hold a key to set the field of view to a chosen value (30–110) |
 | **FreeLook** | Hold a key to switch to third person and orbit the camera without turning the body |
-| **Watermark** | Draws the client logo on the HUD |
+| **Watermark** | Draws the client logo on the HUD; three styles (`default`, `prism`, `gradient`) switchable in its settings |
+| **格挡动画** | Hold the use key with a sword for the vanilla 1.8 block pose. Purely visual: no movement slowdown, nothing sent to the server |
+| **Debug** | Chat readouts: `Attack Type`, `Attack Damage` and `Velocity` (knockback, three decimals) |
 
 The ClickGUI is a clean, translucent window: a 70% white module list on the left, a 50% white settings
 panel on the right, both with rounded corners and scrollable lists. Right click a module to open its

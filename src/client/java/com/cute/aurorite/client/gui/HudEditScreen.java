@@ -59,7 +59,7 @@ public class HudEditScreen extends Screen {
 
 	@Override
 	public void extractRenderState(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
-		HudRenderer.renderAll(g);
+		HudRenderer.renderAll(g, true);
 
 		for (Module module : ModuleManager.modules()) {
 			if (module instanceof HudWidget widget && module.isEnabled()) {

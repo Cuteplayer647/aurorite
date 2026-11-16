@@ -14,7 +14,15 @@
 		"MenuBackgroundMixin",
 		"LevelLoadingScreenMixin",
 		"WindowTitleMixin",
-		"OptionInstanceAccessor"
+		"NightVisionMixin",
+		"LoadingOverlayMixin",
+		"GenericMessageScreenMixin",
+		"PlayerAttackInvoker",
+		"DamageReportMixin",
+		"VelocityMixin",
+		"VanillaEffectsMixin",
+		"BlockAnimationMixin",
+		"HitboxMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

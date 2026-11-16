@@ -28,10 +28,7 @@ public class AuroriteClient implements ClientModInitializer {
 			ModuleManager.ZOOM.tick();
 		});
 
-		// Put the brightness and the field of view back before the game stores its options.
-		ClientLifecycleEvents.CLIENT_STOPPING.register(client -> {
-			ModuleManager.NIGHT_VISION.restoreBeforeShutdown();
-			ModuleManager.ZOOM.restoreBeforeShutdown();
-		});
+		// Put the field of view back before the game stores its options.
+		ClientLifecycleEvents.CLIENT_STOPPING.register(client -> ModuleManager.ZOOM.restoreBeforeShutdown());
 	}
 }

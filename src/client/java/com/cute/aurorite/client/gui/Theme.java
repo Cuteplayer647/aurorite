@@ -68,4 +68,7 @@ public final class Theme {
 	/** A held key in light mode: black, drawn with the configured opacity. */
 	public static final int KEY_DOWN = 0xFF000000;
 	public static final int KEY_TEXT_DOWN = 0xFFFFFFFF;
+
+	/** The aurora teal of the watermark artwork, reused wherever the client name is printed. */
+	public static final int CHAT_CLIENT = 0xFF2EE2BE;
 }

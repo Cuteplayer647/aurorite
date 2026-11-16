@@ -7,6 +7,7 @@ import com.cute.aurorite.client.module.Module;
 import com.cute.aurorite.client.module.ModuleManager;
 import com.cute.aurorite.client.module.setting.BooleanSetting;
 import com.cute.aurorite.client.module.setting.KeySetting;
+import com.cute.aurorite.client.module.setting.ModeSetting;
 import com.cute.aurorite.client.module.setting.NumberSetting;
 import com.cute.aurorite.client.module.setting.Setting;
 import com.cute.aurorite.client.util.RenderUtil;
@@ -325,6 +326,16 @@ public class ClickGuiScreen extends Screen {
 					capturing ? 0x333D7BFF : 0x1F000000);
 			g.text(font, label, boxX + (boxW - font.width(label)) / 2,
 					boxY + (boxH - 8) / 2, capturing ? Theme.ACCENT : Theme.TEXT_ON, false);
+		} else if (setting instanceof ModeSetting modeSetting) {
+			String label = modeSetting.getValue();
+			int boxW = font.width(label) + 14;
+			int boxH = 14;
+			int boxX = panelX + panelWidth - 12 - boxW;
+			int boxY = rowY + (SETTING_ROW_HEIGHT - boxH) / 2;
+
+			RenderUtil.roundedRect(g, boxX, boxY, boxW, boxH, 4.0f, 0x1F000000);
+			g.text(font, label, boxX + (boxW - font.width(label)) / 2,
+					boxY + (boxH - 8) / 2, Theme.TEXT_ON, false);
 		}
 	}
 
@@ -466,6 +477,12 @@ public class ClickGuiScreen extends Screen {
 
 			if (setting instanceof KeySetting keySetting) {
 				capturingKey = keySetting;
+				return true;
+			}
+
+			if (setting instanceof ModeSetting modeSetting) {
+				modeSetting.cycle();
+				AuroriteConfig.save();
 				return true;
 			}
 		}

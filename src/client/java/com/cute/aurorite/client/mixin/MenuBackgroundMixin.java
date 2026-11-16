@@ -9,12 +9,17 @@ import com.cute.aurorite.client.gui.AuroraBackground;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.screens.ProgressScreen;
 import net.minecraft.client.gui.screens.Screen;
 
 /**
  * Puts the static aurora artwork behind every menu screen (world list,
  * multiplayer, settings, ...), replacing the rotating panorama and the dirt
  * background. In-game screens keep the vanilla background.
+ *
+ * <p>{@link ProgressScreen} is included even though a world is still loaded while
+ * it is on screen, because that is the "saving world" screen and it should look
+ * like the rest of the menus rather than falling back to the dirt background.
  */
 @Mixin(Screen.class)
 public class MenuBackgroundMixin {
@@ -22,7 +27,10 @@ public class MenuBackgroundMixin {
 	@Inject(method = "extractBackground", at = @At("HEAD"), cancellable = true)
 	private void aurorite$staticMenuBackground(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick,
 			CallbackInfo callbackInfo) {
-		if (Minecraft.getInstance().level != null) {
+		Minecraft minecraft = Minecraft.getInstance();
+		Screen self = (Screen) (Object) this;
+
+		if (minecraft.level != null && !(self instanceof ProgressScreen)) {
 			return;
 		}
 

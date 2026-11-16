@@ -10,6 +10,7 @@ import com.cute.aurorite.client.module.Module;
 import com.cute.aurorite.client.module.ModuleManager;
 import com.cute.aurorite.client.module.setting.BooleanSetting;
 import com.cute.aurorite.client.module.setting.KeySetting;
+import com.cute.aurorite.client.module.setting.ModeSetting;
 import com.cute.aurorite.client.module.setting.NumberSetting;
 import com.cute.aurorite.client.module.setting.Setting;
 import com.google.gson.Gson;
@@ -91,6 +92,8 @@ public final class AuroriteConfig {
 					numberSetting.setValue(value.getAsFloat());
 				} else if (setting instanceof KeySetting keySetting && value.isJsonPrimitive()) {
 					keySetting.setKey(value.getAsInt());
+				} else if (setting instanceof ModeSetting modeSetting && value.isJsonPrimitive()) {
+					modeSetting.setValue(value.getAsString());
 				}
 			}
 		}
@@ -133,6 +136,8 @@ public final class AuroriteConfig {
 					settings.addProperty(setting.getName(), numberSetting.getValue());
 				} else if (setting instanceof KeySetting keySetting) {
 					settings.addProperty(setting.getName(), keySetting.getKey());
+				} else if (setting instanceof ModeSetting modeSetting) {
+					settings.addProperty(setting.getName(), modeSetting.getValue());
 				}
 			}
 

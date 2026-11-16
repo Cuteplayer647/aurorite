@@ -18,8 +18,8 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 
 /**
- * Lunar style status effect list: one row per active effect with its icon, name,
- * level and remaining time.
+ * Status effect list: one row per active effect with its icon, name, level and
+ * remaining time.
  *
  * <p>The vanilla top-right effect display is hidden while this is on, so the two
  * never show the same information twice.

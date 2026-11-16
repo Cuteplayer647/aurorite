@@ -213,7 +213,7 @@ public final class HudRenderer {
 				module.isDark(), module.isRounded(), module.getBackgroundAlpha());
 	}
 
-	/** Lunar style effect list: icon, name with level, and time left per row. */
+	/** Effect list: icon, name with level, and time left per row. */
 	public static void renderPotionEffects(GuiGraphicsExtractor g, Font font, PotionEffectsModule module) {
 		List<MobEffectInstance> effects = module.effects();
 

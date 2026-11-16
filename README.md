@@ -22,7 +22,7 @@ set of movement and HUD modules.
 | **FPS显示** | Current framerate |
 | **ScaffoldHelper** | While a block is held and you look down, shows how many of that block are left (`128 Blocks`). Counts the hotbar, the inventory and the offhand; blocks inside shulker boxes are not counted |
 | **Hitbox** | Draws a plain box around players in a custom colour. Unlike F3 + B it draws only the box — no eye marker, view or velocity lines. Depth tested (no see-through) and invisible players are skipped |
-| **药水效果** | Lunar style status effect list: icon, name with level and time left. Optionally hides the vanilla top-right display |
+| **药水效果** | Status effect list, one row per effect: vanilla effect icon, name with level, and remaining time. Optionally hides the vanilla top-right display |
 | **自动疾跑** | Keeps sprinting while the forward key is held, and stops at walls or while using an item |
 | **夜视** | Full brightness by overriding the lightmap brightness (not a night vision effect, does not touch the option) |
 | **Zoom** | Hold a key to set the field of view to a chosen value (30–110) |
